@@ -1,0 +1,17 @@
+GET http://localhost:3333
+
+###
+GET http://localhost:3333/auth
+
+###
+POST http://localhost:3333/auth
+Content-Type: application/json
+
+{
+  "name": "Alexandro",
+  "email": "ale_go121@hotmail.com",
+  "password": "123456"
+}
+
+###
+POST http://localhost:3333/auth/authentication
