@@ -1,20 +1,15 @@
 import express, { Request, Response } from 'express';
-import cors from 'cors';
-import routersMiddleware from './middlewares/RoutesMiddlewares';
-import appMiddleware from './middlewares/AppMiddlewares';
+import { AppMiddleware, RoutesMiddleware } from './middlewares';
 import connectDB from './database/mongo';
 import { Run } from './load';
-import { ErrorWrapper } from './middlewares/ErrorWrapper';
 import dotenv from 'dotenv';
 
 dotenv.config();
 
 const app = express();
 
-app.use(cors({ credentials: true, origin: 'http://localhost:3000' }))
-
-routersMiddleware(app)
-appMiddleware(app);
+RoutesMiddleware(app)
+AppMiddleware(app);
 
 app.get('/', (req: Request, res: Response) => {
   res.send('Hello World!');
