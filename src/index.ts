@@ -4,10 +4,11 @@ import routersMiddleware from './middlewares/routes-middlewares';
 import connectDB from './database/mongo';
 import { Run } from './load';
 import { ErrorWrapper } from './middlewares/ErrorWrapper';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const app = express();
-const port = 3333;
-
 
 app.use(cors({ credentials: true, origin: 'http://localhost:3000' }))
 
@@ -24,8 +25,8 @@ app.get('/', (req: Request, res: Response) => {
 
 connectDB();
 
-app.listen(port, () => {
+app.listen(process.env.PORT, () => {
   Run();
-  console.log(`Server is running on http://localhost:${port}`);
+  console.log(`Server is running on http://localhost:${process.env.PORT}`);
 });
 
