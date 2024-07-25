@@ -1,6 +1,7 @@
 import express, { Request, Response } from 'express';
 import cors from 'cors';
-import routersMiddleware from './middlewares/routes-middlewares';
+import routersMiddleware from './middlewares/RoutesMiddlewares';
+import appMiddleware from './middlewares/AppMiddlewares';
 import connectDB from './database/mongo';
 import { Run } from './load';
 import { ErrorWrapper } from './middlewares/ErrorWrapper';
@@ -13,11 +14,7 @@ const app = express();
 app.use(cors({ credentials: true, origin: 'http://localhost:3000' }))
 
 routersMiddleware(app)
-
-app.use(express.json());
-app.use(express.static('public'));
-
-app.use(ErrorWrapper);
+appMiddleware(app);
 
 app.get('/', (req: Request, res: Response) => {
   res.send('Hello World!');
