@@ -49,32 +49,26 @@ class AuthController {
   }
 
   async Authentication(httpRequest: Request, httpResponse: Response) {
+
     const { face } = httpRequest.body;
 
     if (!face) {
       throw new NotFoundError('Face não informada');
     }
 
-    try {
+    const descriptors = JSON.parse(face ? face : '[]');
+    const descriptor = new Float32Array(descriptors);
 
-      const descriptors = JSON.parse(face ? face : '[]');
-      const descriptor = new Float32Array(descriptors);
+    const faceApi = new FaceApi();
+    const faceMatcher = await faceApi.createFaceMatcher();
 
-      const faceApi = new FaceApi();
-      const faceMatcher = await faceApi.createFaceMatcher();
+    const result = faceMatcher.findBestMatch(descriptor);
 
-      const result = faceMatcher.findBestMatch(descriptor);
-
-      if (result.distance <= MATCH_THRESHOLD) {
-        return httpResponse.status(200).json({ message: 'Autenticação bem-sucedida', result });
-      }
-      else {
-        return httpResponse.status(401).json({ message: 'Autenticação falhou: face não reconhecida' });
-      }
+    if (result.distance <= MATCH_THRESHOLD) {
+      return httpResponse.status(200).json({ message: 'Autenticação bem-sucedida', result });
     }
-    catch (error) {
-      console.error(error);
-      return httpResponse.status(500).json({ message: 'Erro ao processar a autenticação' });
+    else {
+      return httpResponse.status(401).json({ message: 'Autenticação falhou: face não reconhecida' });
     }
   }
 }

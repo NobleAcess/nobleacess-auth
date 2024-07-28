@@ -1,6 +1,6 @@
 import { Router } from "express"
 import AuthController from "../controllers/auth-controller";
-import { resolver } from "../helpers/ExpressRouterAdapter";
+import { resolver } from "../helpers/resolver";
 
 const router = Router()
 
