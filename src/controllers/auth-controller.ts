@@ -2,6 +2,8 @@ import { Request, Response } from "express";
 import AuthModel from '../models/auth-model';
 import FaceApi from "../services/FaceApi";
 import NotFoundError from "../errors/NotFoundError";
+import BadRequestError from "../errors/BadRequestError";
+import UnauthorizedError from "../errors/UnauthorizedError";
 
 const MATCH_THRESHOLD = 0.6; // Defina o limite de distância para uma correspondência válida
 
@@ -14,7 +16,7 @@ class AuthController {
     const auth = await AuthModel.findOne({ email }).exec();
 
     if (auth) {
-      return httpResponse.status(400).json({ message: 'Email já cadastrado' });
+      throw new BadRequestError('Email já cadastrado');
     }
 
     const authModel = new AuthModel({
@@ -68,7 +70,7 @@ class AuthController {
       return httpResponse.status(200).json({ message: 'Autenticação bem-sucedida', result });
     }
     else {
-      return httpResponse.status(401).json({ message: 'Autenticação falhou: face não reconhecida' });
+      throw new UnauthorizedError('Autenticação falhou: face não reconhecida');
     }
   }
 }
