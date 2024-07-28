@@ -1,5 +1,5 @@
 // errors/NotFoundError.ts
-class UnauthorizedError extends Error {
+export class UnauthorizedError extends Error {
   statusCode: number;
 
   constructor(message: string) {
@@ -8,5 +8,3 @@ class UnauthorizedError extends Error {
     this.statusCode = 401;
   }
 }
-
-export default UnauthorizedError;

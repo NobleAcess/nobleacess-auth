@@ -1,5 +1,5 @@
 // errors/NotFoundError.ts
-class BadRequestError extends Error {
+export class BadRequestError extends Error {
   statusCode: number;
 
   constructor(message: string) {
@@ -8,5 +8,3 @@ class BadRequestError extends Error {
     this.statusCode = 400;
   }
 }
-
-export default BadRequestError;

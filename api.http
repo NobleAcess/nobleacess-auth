@@ -4,15 +4,18 @@ GET http://localhost:3333
 GET http://localhost:3333/auth
 
 ###
+GET http://localhost:3333/auth/669db8761e18b2d18c22280c
+
+###
 POST http://localhost:3333/auth
 Content-Type: application/json
 
 {
   "name": "Alexandro",
-  "email": "ale_go121@hotmail.com",
+  "email": "ale_g243333@hotmail.com",
   "password": "123456"
 }
-
+ 
 ###
 POST http://localhost:3333/auth/authentication
 Content-Type: application/json

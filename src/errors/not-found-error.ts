@@ -1,5 +1,5 @@
 // errors/NotFoundError.ts
-class NotFoundError extends Error {
+export class NotFoundError extends Error {
   statusCode: number;
 
   constructor(message: string) {
@@ -8,5 +8,3 @@ class NotFoundError extends Error {
     this.statusCode = 404;
   }
 }
-
-export default NotFoundError;

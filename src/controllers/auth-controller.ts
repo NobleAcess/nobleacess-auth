@@ -1,15 +1,15 @@
 import { Request, Response } from "express";
 import AuthModel from '../models/auth-model';
-import FaceApi from "../services/FaceApi";
-import NotFoundError from "../errors/NotFoundError";
-import BadRequestError from "../errors/BadRequestError";
-import UnauthorizedError from "../errors/UnauthorizedError";
+import FaceApi from "../services/faceApi-service";
+import { BadRequestError, NotFoundError, UnauthorizedError } from "../errors";
+import { POST, GET } from "../decorators/http-decorators";
 
 const MATCH_THRESHOLD = 0.6; // Defina o limite de distância para uma correspondência válida
 
 class AuthController {
 
-  async create(httpRequest: Request, httpResponse: Response) {
+  @POST()
+  async create(httpRequest: Request) {
 
     const { name, email, password, face } = httpRequest.body;
 
@@ -28,28 +28,29 @@ class AuthController {
     });
 
     await authModel.save();
-    return httpResponse.status(201).json(authModel);
+    return authModel;
   }
 
-  async findAll(httpRequest: Request, httpResponse: Response) {
-    const auth = await AuthModel.find().exec();
-    return httpResponse.status(200).json(auth);
+  @GET()
+  async findAll() {
+    return await AuthModel.find().exec();
   }
 
-  async findById(httpRequest: Request, httpResponse: Response) {
-    const { id } = httpRequest.body;
-    const auth = await AuthModel.findById(id);
-    return httpResponse.status(200).json(auth);
+  @GET()
+  async findById(httpRequest: Request) {
+    const { id } = httpRequest.params;
+    return await AuthModel.findById(id).exec();
   }
 
-  async updateFace(httpRequest: Request, httpResponse: Response) {
+  @GET()
+  async updateFace(httpRequest: Request) {
     const { face, id } = httpRequest.body;
 
     await AuthModel.updateOne({ _id: id }, { face });
-    const auth = await AuthModel.findById(id).exec();
-    return httpResponse.status(200).json(auth);
+    return await AuthModel.findById(id).exec();
   }
 
+  @GET()
   async Authentication(httpRequest: Request, httpResponse: Response) {
 
     const { face } = httpRequest.body;
@@ -67,7 +68,7 @@ class AuthController {
     const result = faceMatcher.findBestMatch(descriptor);
 
     if (result.distance <= MATCH_THRESHOLD) {
-      return httpResponse.status(200).json({ message: 'Autenticação bem-sucedida', result });
+      return { message: 'Autenticação bem-sucedida', result };
     }
     else {
       throw new UnauthorizedError('Autenticação falhou: face não reconhecida');
